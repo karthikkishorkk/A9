@@ -1,0 +1,63 @@
+classDiagram
+    direction TB
+
+    namespace Dynamic_Guard_Factory {
+        class rolesRestrict {
+            <<Factory Function>>
+            +rolesRestrict(...allowedRoles: string[]) Type~CanActivate~
+        }
+        class RolesRestriceGuard {
+            <<Dynamic Product Class>>
+            -userService: UsersService
+            +canActivate(context: ExecutionContext) Promise~boolean~
+        }
+        class CanActivate {
+            <<Product Interface>>
+            +canActivate(context: ExecutionContext) Promise~boolean~
+        }
+    }
+
+    namespace DataLoader_Batch_Loaders {
+        class UserDataLoader {
+            <<Batch Loader Provider>>
+            +userLoader: DataLoader~string, User~
+        }
+        class FlightDataLoader {
+            <<Batch Loader Provider>>
+            +flightLoader: DataLoader~string, Flight~
+        }
+        class SeatDataLoader {
+            <<Batch Loader Provider>>
+            +seatLoader: DataLoader~string, Seat~
+            +seatManyLoader: DataLoader~string, Seat[]~
+        }
+    }
+
+    namespace Async_Email_Queue {
+        class SendGridService {
+            <<Job Producer Service>>
+            -emailQueue: Queue
+            +send(mail: MailDataRequired) Promise~void~
+        }
+        class UsersResolver {
+            <<Job Producer Resolver>>
+            -emailQueue: Queue
+            +forgetPassword(...) Promise~forgetPasswordResponse~
+        }
+        class BullMQ_EmailQueue {
+            <<Queue Channel>>
+            'email' Queue
+        }
+        class EmailProcessor {
+            <<Consumer WorkerHost>>
+            -userService: UsersService
+            +process(job: Job) Promise~any~
+        }
+    }
+
+    rolesRestrict ..> RolesRestriceGuard : dynamically instantiates & mixins
+    RolesRestriceGuard ..|> CanActivate : implements
+
+    SendGridService --> BullMQ_EmailQueue : enqueues email job
+    UsersResolver --> BullMQ_EmailQueue : enqueues reset token job
+    BullMQ_EmailQueue --> EmailProcessor : dispatches job execution

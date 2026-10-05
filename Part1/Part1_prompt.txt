@@ -1,0 +1,20 @@
+You are tasked with conducting a deep, source-code-grounded repository archaeology and design pattern analysis of the NestJS Airline Reservation System codebase (DP_Case_study) for Team A9 Part 1 Case Study submission.
+
+CRITICAL INSTRUCTIONS & CONSTRAINTS:
+1. SOURCE OF TRUTH: The actual TypeScript application source code in src/ is the ultimate source of truth. Existing analysis documents (DP_REPOSITORY_ANALYSIS.md, DP_DEPENDENCY_MAP.md, DP_PATTERN_EVIDENCE.md) serve as working hypotheses only and must be verified against source code.
+2. NO SOURCE MODIFICATION: Do NOT alter, refactor, fix bugs, or introduce new design patterns in the baseline application source code under src/. Do NOT change dependencies or package.json.
+3. QUALITY OVER QUANTITY: Do NOT optimize for the number of patterns. Rigorously evaluate candidates and reject false positives. Differentiate between:
+   - CONFIRMED DESIGN PATTERN (Custom application-level GoF or micro-architectural pattern)
+   - CONFIRMED SOFTWARE/ARCHITECTURAL PATTERN (Application-level or enterprise infrastructure pattern)
+   - FRAMEWORK MECHANISM (Provided out-of-the-box by NestJS, TypeORM, Passport, BullMQ)
+   - PATTERN-LIKE STRUCTURE (Exhibits pattern characteristics but has implementation flaws or lacks formal compliance)
+   - REJECTED / INSUFFICIENT EVIDENCE (Unsupported claims, naming coincidences, or absent features)
+4. BASELINE REPRODUCIBILITY: Determine and record the exact Git commit SHA, environment versions (Node.js, npm, TypeScript, NestJS, TypeORM), build execution outputs, and test suite results.
+5. FEATURE & WORKFLOW TRACING: Trace all major application capabilities (Flight management, Booking creation/cancellation, Seat validation/loaders, User/Auth session & OAuth, BullMQ email notifications, Cron auto-deletion) and explicitly record non-implemented subsystems (e.g. Payment = NOT FOUND / NOT IMPLEMENTED).
+6. EVIDENCE EXTRACTION: For every confirmed pattern, extract exact file paths, verified line ranges, participant role mappings, and concrete architectural evidence explaining why it qualifies as a genuine pattern collaboration.
+7. SUBMISSION ARTIFACT GENERATION: Produce the required Part 1 deliverables under A9/Part1/:
+   - patterns.csv (source_version, pattern_name, pattern_type, instance_name, participant_roles, source_locations, intent_and_evidence)
+   - Pattern_count.csv (source_version, summary, pattern_name, count)
+   - pattern_architecture/ (pattern_architecture.mmd, pattern_architecture.png)
+   - Part1_prompt.txt (this prompt)
+   - llm.csv (auditable LLM interaction logs)

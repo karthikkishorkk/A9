@@ -1,0 +1,6 @@
+source_version,summary,pattern_name,count
+ae2c24869377ce2f7a29022cd237d808338156ea,per_pattern,Dynamic Guard Factory,1
+ae2c24869377ce2f7a29022cd237d808338156ea,per_pattern,Batch Loader,3
+ae2c24869377ce2f7a29022cd237d808338156ea,per_pattern,Producer-Consumer,1
+ae2c24869377ce2f7a29022cd237d808338156ea,total_pattern_types,ALL,3
+ae2c24869377ce2f7a29022cd237d808338156ea,total_pattern_instances,ALL,5
