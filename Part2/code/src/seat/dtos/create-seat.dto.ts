@@ -16,7 +16,7 @@ export class CreateSeatInput {
   @IsString()
   flightId: string;
 
-  @Field(() => SeatClass, { nullable: true, defaultValue: SeatClass.ECONOMY })
+  @Field(() => SeatClass, { nullable: true })
   @IsOptional()
   @IsEnum(SeatClass)
   seatClass?: SeatClass;

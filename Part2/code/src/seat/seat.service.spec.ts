@@ -140,5 +140,22 @@ describe('SeatService', () => {
         service.createSeat(1, 25, 'f1', mockBooking),
       ).rejects.toThrow('The row no must be between 1 and 20');
     });
+    it('should infer FIRST class when seatClass is omitted and row is 2', async () => {
+      seatRepoMock.findOne.mockResolvedValue(null);
+      const seat = await service.createSeat(1, 2, 'f1', mockBooking);
+      expect(seat.seatClass).toBe(SeatClass.FIRST);
+    });
+
+    it('should infer BUSINESS class when seatClass is omitted and row is 5', async () => {
+      seatRepoMock.findOne.mockResolvedValue(null);
+      const seat = await service.createSeat(1, 5, 'f1', mockBooking);
+      expect(seat.seatClass).toBe(SeatClass.BUSINESS);
+    });
+
+    it('should infer ECONOMY class when seatClass is omitted and row is 10', async () => {
+      seatRepoMock.findOne.mockResolvedValue(null);
+      const seat = await service.createSeat(1, 10, 'f1', mockBooking);
+      expect(seat.seatClass).toBe(SeatClass.ECONOMY);
+    });
   });
 });

@@ -1,7 +1,7 @@
 # Part 2 README Contribution
 
 ## Application/Source URL
-Local repository: DP_Case_study
+https://github.com/DevBM04/DP_Case_study
 
 ## Source Commits
 - **Original / Baseline (Part 1):** ae2c24869377ce2f7a29022cd237d808338156ea
