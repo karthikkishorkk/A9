@@ -1,0 +1,66 @@
+classDiagram
+    direction LR
+
+    class Flight {
+        +string id
+        +number flightNumber
+        +string departureAirport
+        +string destinationAirport
+        +string date
+        +string departureTime
+        +string arrivalTime
+        +string airLine
+        +number availableSeats
+        +FlightStatus status  <<ADDED in Change1>>
+        +User responsibleBy
+        +Booking[] bookings
+    }
+
+    class FlightStatus {
+        <<enumeration>>
+        ACTIVE
+        CANCELLED
+    }
+
+    class Seat {
+        +string id
+        +number seatNo
+        +number rowNo
+        +boolean isAvailable
+        +SeatClass seatClass  <<ADDED in Change2>>
+        +string flightId
+        +Booking booking
+    }
+
+    class SeatClass {
+        <<enumeration>>
+        FIRST (rows 1-3)
+        BUSINESS (rows 4-8)
+        ECONOMY (rows 9-20)
+    }
+
+    class Booking {
+        +string id
+        +string userId
+        +string flightId
+        +string[] seatId
+        +Date createdAt
+        +User user
+        +Flight flight
+        +Seat[] seat
+        +modifyBooking()  <<ADDED in Change3>>
+    }
+
+    class User {
+        +string id
+        +string name
+        +string email
+        +string role
+        +Booking[] bookedFlights
+    }
+
+    Flight --* FlightStatus : has status
+    Seat --* SeatClass : has cabin class
+    Booking --> User : belongs to
+    Booking --> Flight : reserves
+    Booking "1" --> "*" Seat : contains
