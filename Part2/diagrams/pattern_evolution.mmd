@@ -1,98 +1,103 @@
 classDiagram
     direction TB
 
-    %% Pattern 1: Dynamic Guard Factory (Creational)
+    %% Dynamic Guard Factory
     class rolesRestrict {
         <<Factory Function>>
-        +rolesRestrict(...allowedRoles: string[]) Type~CanActivate~
+        +rolesRestrict(...allowedRoles) Type~CanActivate~
     }
 
     class RolesRestriceGuard {
-        <<Dynamic Product Class (mixin)>>
+        <<Dynamic Mixin Guard>>
         -UsersService userService
-        +canActivate(context: ExecutionContext) Promise~boolean~
+        +canActivate(context) Promise~boolean~
     }
 
     class CanActivate {
-        <<Product Interface>>
-        +canActivate(context: ExecutionContext) boolean
+        <<Interface>>
+        +canActivate(context) boolean
     }
 
-    rolesRestrict ..> RolesRestriceGuard : dynamically synthesizes
+    class FlightRestrict {
+        <<Guard>>
+        +canActivate(context) Promise~boolean~
+    }
+
+    rolesRestrict ..> RolesRestriceGuard : creates through mixin
     RolesRestriceGuard ..|> CanActivate : implements
+    FlightRestrict ..|> CanActivate : implements
 
     class FlightResolver {
-        <<Consumer Resolver>>
-        +cancelFlight(id: string) Flight
-        +removeFlight(id: string) FlightResponse
-        +myAssignedFlights(user: string) Flight[]
+        +cancelFlight(id) Flight
+        +removeFlight(id) FlightResponse
+        +myAssignedFlights(user) Flight[]
     }
 
     class BookingResolver {
-        <<Consumer Resolver>>
-        +createBooking(user: string, bookingBody: CreateBooking) Booking
-        +modifyBooking(user: string, updateBody: UpdateBooking) Booking
-        +updateBooking(user: string, updateBody: UpdateBooking) Booking
-        +cancelBooking(user: string, cancelBody: CancelBooking) responseMessage
-        +user(booking: Booking) User
-        +flight(booking: Booking) Flight
-        +seat(booking: Booking) Seat[]
+        +createBooking(user, bookingBody) Booking
+        +modifyBooking(user, updateBody) Booking
+        +updateBooking(user, updateBody) Booking
+        +cancelBooking(user, cancelBody) responseMessage
+        +user(booking) User
+        +flight(booking) Flight
+        +seat(booking) Seat[]
     }
 
-    RolesRestriceGuard ..> FlightResolver : guards cancelFlight & myAssignedFlights
-    RolesRestriceGuard ..> BookingResolver : guards create, modify, cancel
+    FlightResolver ..> rolesRestrict : cancelFlight ADMIN/CREW
+    FlightResolver ..> FlightRestrict : other restricted operations
+    FlightResolver ..> rolesRestrict : myAssignedFlights CREW/SECURITY
+    BookingResolver ..> rolesRestrict : booking operations USER
+    BookingResolver ..> FlightRestrict : not directly applied
 
-    %% Pattern 2, 3, 4: Batch Loader (Architectural)
+    %% DataLoader pattern
     class UserDataLoader {
-        <<Batch Loader Provider>>
+        <<Batch Loader>>
         +userLoader: DataLoader~string, User~
     }
 
     class FlightDataLoader {
-        <<Batch Loader Provider>>
+        <<Batch Loader>>
         +flightLoader: DataLoader~string, Flight~
     }
 
     class SeatDataLoader {
-        <<Batch Loader Provider>>
+        <<Batch Loader>>
         +seatLoader: DataLoader~string, Seat~
         +seatManyLoader: DataLoader~string, Seat[]~
     }
 
-    BookingResolver --> UserDataLoader : field resolver user()
-    BookingResolver --> FlightDataLoader : field resolver flight()
-    BookingResolver --> SeatDataLoader : field resolver seat()
+    BookingResolver --> UserDataLoader : resolves user
+    BookingResolver --> FlightDataLoader : resolves flight
+    BookingResolver --> SeatDataLoader : resolves seats
 
-    %% Pattern 5: Producer-Consumer (Architectural)
+    %% Producer-Consumer email queue
+    class FlightService {
+        +cancelFlight(id) Promise~Flight~
+    }
+
     class SendGridService {
-        <<Job Producer>>
-        +send(mailData: MailDataRequired) Promise~void~
+        +send(mailData) Promise~void~
     }
 
     class UsersResolver {
-        <<Job Producer>>
-        +forgetPassword(dto: resetPasswordDto)
-    }
-
-    class FlightService {
-        <<Job Producer>>
-        +cancelFlight(id: string) Promise~Flight~
+        +forgetPassword(dto)
     }
 
     class BullMQ_EmailQueue {
-        <<Queue Channel / Broker>>
-        +"email" queue
+        <<Queue>>
         +add(jobName, payload)
     }
 
     class EmailProcessor {
-        <<Consumer Worker>>
-        +process(job: Job) Promise~any~
-        +onCompleted(job: Job)
-        +onFailed(job: Job)
+        <<Worker Consumer>>
+        +process(job) Promise~any~
+        +onCompleted(job)
+        +onFailed(job)
     }
 
-    SendGridService --> BullMQ_EmailQueue : enqueues "sending-token-sendGrid"
-    UsersResolver --> BullMQ_EmailQueue : enqueues "sending-token-mailtrap"
-    FlightService --> SendGridService : delegates cancellation email
-    BullMQ_EmailQueue --> EmailProcessor : consumes async jobs
+    FlightService --> SendGridService : sends cancellation notice
+    SendGridService --> BullMQ_EmailQueue : adds sending-token-sendGrid
+    UsersResolver --> BullMQ_EmailQueue : adds sending-token-mailtrap
+    BullMQ_EmailQueue --> EmailProcessor : delivers jobs
+    EmailProcessor --> SendGrid : sends SendGrid mail
+    EmailProcessor --> UsersService : handles Mailtrap jobs

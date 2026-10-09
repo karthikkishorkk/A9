@@ -11,7 +11,7 @@ classDiagram
         +string arrivalTime
         +string airLine
         +number availableSeats
-        +FlightStatus status  <<ADDED in Change1>>
+        +FlightStatus status
         +User responsibleBy
         +Booking[] bookings
     }
@@ -27,16 +27,16 @@ classDiagram
         +number seatNo
         +number rowNo
         +boolean isAvailable
-        +SeatClass seatClass  <<ADDED in Change2>>
+        +SeatClass seatClass
         +string flightId
         +Booking booking
     }
 
     class SeatClass {
         <<enumeration>>
-        FIRST (rows 1-3)
-        BUSINESS (rows 4-8)
-        ECONOMY (rows 9-20)
+        FIRST
+        BUSINESS
+        ECONOMY
     }
 
     class Booking {
@@ -48,7 +48,6 @@ classDiagram
         +User user
         +Flight flight
         +Seat[] seat
-        +modifyBooking()  <<ADDED in Change3>>
     }
 
     class User {
@@ -59,8 +58,23 @@ classDiagram
         +Booking[] bookedFlights
     }
 
-    Flight --* FlightStatus : has status
-    Seat --* SeatClass : has cabin class
-    Booking --> User : belongs to
-    Booking --> Flight : reserves
+    class FlightService {
+        +cancelFlight(id) Promise~Flight~
+    }
+
+    class BookingService {
+        +createBooking(userId, flightId)
+        +cancelBooking(userId, bookingId)
+        +modifyBooking(userId, updateInput) Promise~Booking~
+    }
+
+    Flight --> FlightStatus : status
+    Seat --> SeatClass : seatClass
+    Booking "*" --> "1" User : belongs to
+    Booking "*" --> "1" Flight : reserves
     Booking "1" --> "*" Seat : contains
+
+    FlightService ..> Flight : cancels
+    BookingService ..> Booking : creates and modifies
+    BookingService ..> Flight : validates flight
+    BookingService ..> Seat : updates seats
