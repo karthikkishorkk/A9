@@ -2,7 +2,7 @@
 
 ## 1. Environment
 
-The tests were run against the original, unmodified application in `data/code/`.
+Tests were run against the original, unmodified application in `data/code/`.
 
 - **Operating system:** macOS 26.5
 - **Node.js:** v24.15.0
@@ -16,12 +16,12 @@ The tests were run against the original, unmodified application in `data/code/`.
 
 | Command | Recorded output | Exit code | Result |
 |---|---|---:|---|
-| `npm ci` | [`install_output.txt`](install_output.txt) | Not captured | Dependencies installed; npm reported dependency warnings and 147 vulnerabilities. |
+| `npm ci` | [`install_output.txt`](install_output.txt) | 0 | Dependencies installed successfully. npm reported dependency warnings and 147 vulnerabilities. |
 | `npm run build` | [`build_output.txt`](build_output.txt) | 0 | Build succeeded. |
 | `npm test` | [`unit_test_output.txt`](unit_test_output.txt) | 0 | 10 test suites passed; 10 tests passed. |
 | `npm run test:e2e` | [`e2e_test_output.txt`](e2e_test_output.txt) | 1 | E2E suite failed during module resolution; no tests ran. |
 
-The original exit code for `npm ci` was not captured. No exit code has been inferred or added retrospectively.
+The `npm ci` exit code is confirmed by the recorded terminal output. The other exit codes and results are documented in their respective command output files.
 
 ## 3. E2E Test Failure
 
@@ -32,7 +32,7 @@ Cannot find module 'src/flight/entities/flight.entity'
 from '../src/users/entities/user.entity.ts'
 ```
 
-The captured output reports one failed test suite and zero tests executed. The failure occurs while Jest loads the application, before the E2E tests run.
+The captured output reports one failed test suite and zero tests executed. The failure occurred while Jest was loading the application, before the E2E tests ran.
 
 Inspection of `data/code/test/jest-e2e.json` showed no `moduleNameMapper` entry for resolving `src/` import paths. This is consistent with the module-resolution failure shown in the captured output.
 
@@ -40,7 +40,7 @@ The E2E configuration and application source were not modified to work around th
 
 ## 4. Screenshots
 
-The screenshots of the terminal results are stored in [`screenshots/`](screenshots/).
+Screenshots of the terminal results are stored in [`screenshots/`](screenshots/).
 
 - [`build_result.png`](screenshots/build_result.png) — successful build with exit code 0.
 - [`unit_tests_pass.png`](screenshots/unit_tests_pass.png) — unit-test summary showing 10 suites and 10 tests passed.
