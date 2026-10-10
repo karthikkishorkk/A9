@@ -1,10 +1,15 @@
 # Team A9 — Design Patterns Case Study (23CSE455)
 
-**Application:** NestJS Airline Reservation System
-**Original repository:** <https://github.com/zeyadAlbadawy/Airport-Reservation-System.git>
-**Team working repository (Part 2 evolution commits):** <https://github.com/DevBM04/DP_Case_study>
-**Baseline branch:** `main`
-**Baseline commit SHA:** `ae2c24869377ce2f7a29022cd237d808338156ea`
+**Application:** NestJS Airline Reservation System  
+
+**Original repository:** <https://github.com/zeyadAlbadawy/Airport-Reservation-System.git>  
+
+**Team working repository (Part 2 evolution commits):** <https://github.com/DevBM04/DP_Case_study>  
+
+**Baseline branch:** `main`  
+
+**Baseline commit SHA:** `ae2c24869377ce2f7a29022cd237d808338156ea`  
+
 
 This repository documents a design-pattern case study of a GraphQL-based airline reservation backend. It identifies the design patterns present in the original code, evolves the application through three feature changes while tracking how each pattern is affected, and re-implements selected patterns in four programming languages to compare them.
 
