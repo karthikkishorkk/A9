@@ -1,4 +1,4 @@
-# Team A9 — Design Patterns Case Study (23CSE455)
+# Team A8 — Design Patterns Case Study (23CSE455)
 
 **Application:** NestJS Airline Reservation System  
 
@@ -83,10 +83,10 @@ The baseline contains no payment entity, service, resolver or controller. Paymen
 ## 3. Repository Structure
 
 ```text
-A9/
+A8/
 ├── README.md
-├── A9_Report.pdf                      # final project report
-├── A9_Report.tex                      # LaTeX source of the report
+├── A8_Report.pdf                      # final project report
+├── A8_Report.tex                      # LaTeX source of the report
 │
 ├── data/                              # BASELINE (unmodified original application)
 │   ├── code/                          # original NestJS source at commit ae2c248
